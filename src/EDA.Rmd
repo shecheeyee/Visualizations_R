@@ -2,7 +2,7 @@
 title: "Visualizations"
 author: "She Chee Yee (A0240383L)"
 date: "2023-04-29"
-output: html_document
+output: github_document
 ---
 
 
