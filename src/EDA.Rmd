@@ -1,0 +1,1105 @@
+---
+title: "Visualizations"
+author: "She Chee Yee (A0240383L)"
+date: "2023-04-29"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(readxl)
+library(lubridate)
+library(tidyverse)
+library(stringr)
+
+```
+
+
+
+```{r }
+volcano = read.csv("../data/volcano_practice.csv")
+region = read.csv("../data/continents_practice.csv")
+
+```
+
+## Including Plots
+How many countries are there in this data set?
+How many unique types of volcanoes are there in the data?
+What is the second most common volcano type in the data?
+
+```{r }
+volcano %>% distinct(country) %>% count()
+
+volcano %>% mutate(type = str_remove(primary_volcano_type, "\\(s\\)|\\(es\\)|\\?")) %>%
+                     distinct(type) %>% count()
+
+volcano %>% mutate(type = str_remove(primary_volcano_type, "\\(s\\)|\\(es\\)|\\?")) %>% 
+  group_by(type) %>% count(sort = TRUE)
+
+```
+
+```{r}
+volcano = volcano %>% mutate(type = str_remove(primary_volcano_type,"\\(s\\)|\\(es\\)|\\?"))
+
+volcano %>% mutate(type = reorder(type, elevation, median)) %>%
+  ggplot(aes(x = type, y = elevation)) +
+  geom_boxplot() +
+  coord_flip()
+
+
+
+```
+Next, let us examine the number of volcanoes across continents.
+The file continents_practice.csv classifies countries into
+continents. We’ve read it in as region.
+Fill in the blanks in the code to create the bar chart below.
+
+2 ways to do this.
+1. use geom_bar(), aes is Continent, geom_text with `label = ..count.., stat = "count"
+
+2. summarize the data with group_by, geom_col(x = continents, y = count, label = count) then geom_text()
+
+```{r}
+continents= read.csv("../data/continents_practice.csv")
+
+volcano =volcano %>% left_join(continents, by = c("country" = "Entity")) 
+
+
+
+ggplot(data = volcano, aes(Continent)) +
+  geom_bar() +
+  geom_text(aes(label = ..count..), stat = "count")
+
+v1 =volcano %>% group_by(Continent) %>%
+  summarize(count = n())
+
+ggplot(data = v1, aes(Continent, count, label = count)) +
+  geom_col() +
+  geom_text(nudge_y = 10.0)
+
+v1 %>% mutate(pct = count/sum(count) * 100)
+
+
+
+```
+
+
+
+
+
+The company wants to figure out when people begin Christmas
+shopping, so that they can start preparing for it.
+▶ Write the R code to create an object named qn1 that contain the
+number of Christmas-related items sold in each month.
+Specifically, look for the following keywords in the Description
+column: CHRISTMASS, XMAS, REINDEER, or SANTA
+
+```{r}
+
+
+retail = readRDS("../data/retail_practice.rds")%>%
+  mutate(InvoiceDate = as.Date(InvoiceDate),
+         month = month(InvoiceDate, label = TRUE, abbr =TRUE),
+         year = year(InvoiceDate), 
+         day = day(InvoiceDate))
+
+
+qn1 = retail %>% filter(str_detect(Description, "CHRISTMAS|XMAS|REINDEER|SANTA")) %>%
+  group_by(year, month) %>% summarize(n = n(), .groups = "drop")
+
+qn1.1 = retail %>% filter(str_detect(Description, "CHRISTMAS|XMAS|REINDEER|SANTA")) %>%
+  count(year, month)
+
+qn1 %>% head(4)
+qn1.1 %>% head(4)
+
+
+
+```
+
+
+
+```{r}
+
+retail %>% group_by(year, month) %>% distinct(day) %>% count()
+
+qn2 = retail %>% 
+  mutate(InvoiceDate = as_date(InvoiceDate),
+         month = substr(InvoiceDate, 1, 7)) %>%
+  # Compute number of unique days in each month and monthly revenue
+  group_by(month) %>%
+  summarize(days = n_distinct(InvoiceDate),
+            rev = sum(UnitPrice*Quantity)/1000) %>%
+  ungroup()
+
+qn2 %>% filter(month != "2011-12") %>% summarize(mean_days = mean(days))
+
+
+
+
+ggplot(data = qn2, aes(x = factor(month), y = rev)) +
+  geom_point(size = 6) +
+  geom_line(aes(group = 1)) +
+  geom_text(aes(label = days), color = "white", size = 2.7) +
+  annotate(geom = "text", x = 12.6, y = 53.5, label = "days") +
+  labs(title = "Monthly revenue in thousands of pounds, all items",
+       x = "Month", y = "Revenue in thousands of pounds",
+       subtitle = "Number of unique transaction days in each month shown in text.") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 30))
+
+```
+Notice that 2011 Dec only have 8 days, we can try to increase the number of days and quantify by scaling the number of days to average days per month in the dataset.
+
+
+
+
+
+```{r}
+library(nycflights13)
+library(tidyverse)
+library(readxl)
+library(stringr)
+library(lubridate)
+
+flights %>% filter(month == 12, origin == "JFK") %>% group_by(dest) %>% count(sort = TRUE)
+
+flights %>% group_by(carrier) %>%
+  summarize(count = n(), avg_dist = sum(distance)/count) %>%
+  arrange(desc(avg_dist))
+
+flights %>% filter(arr_delay > 0, !is.na(arr_delay)) %>%
+  group_by(month, day) %>%
+  summarize(avg_delay = sum(arr_delay) / n()) %>%
+  arrange(desc(avg_delay))
+
+
+flights %>% filter(month == 7, day == 4) %>% 
+  left_join(planes, by = c("tailnum")) %>% 
+  filter(!is.na(dep_time)) %>%
+  summarize(avg_seats = round(mean(seats, na.rm = TRUE), 2)) %>% pull(avg_seats)
+
+flights %>% mutate(dep_hour = as.integer(sched_dep_time / 100)) %>%
+  group_by(dep_hour) %>%
+  mutate(over = case_when(dep_delay > 15 ~ 1,
+                          TRUE ~ 0)) %>%
+  summarize(p = sum(over) / n()) %>%
+  arrange(desc(p))
+# What plane traveled the most times in 2013? Plot the number of trips per week over the year for that plane.
+plane = flights  %>% left_join(planes, by = c("tailnum" = "tailnum")) %>%
+  filter(year.x == 2013, !(is.na(dep_time))) %>% 
+  group_by(tailnum) %>%
+  summarize(count = n()) %>%
+  arrange(desc(count)) %>% 
+  top_n(1, count) %>% pull(tailnum)
+
+most = flights %>% filter(tailnum == plane, !(is.na(dep_time)))
+most_trip = flights %>% filter(tailnum == plane, !(is.na(dep_time))) %>%
+  unite(col = date,year,  month, day, sep = "-") %>%
+  mutate(date = as.Date(date),
+         week = week(date)) %>%
+  group_by(week) %>%
+  summarize(count = n())
+
+ggplot(data = most_trip, aes(week, count)) + 
+  geom_point(color = "red3", size = 3) + 
+  geom_line() + 
+  labs(x = "Week of the year", y = "", title = "Trips per week for N725MQ in 2013") + 
+  theme_minimal()
+  
+colnms <- colnames(most)
+
+# filter
+most %>%
+  filter_at(vars(all_of(colnms)), any_vars(is.na(.)))
+```
+
+scatterplot
+
+```{r}
+data(mpg)
+str(mpg)
+
+df = mpg %>% mutate(trans = str_sub(trans, 1, 4))
+
+df1 = mpg %>% mutate(trans = case_when(str_detect(trans, "^auto") ~ "auto",
+                                       str_detect(trans, "^manual") ~ "manual",
+                                       TRUE ~ trans))
+
+ggplot(data = df1, aes(x = displ, y = hwy, label = trans)) +
+  geom_point(size = 2,  alpha = 1) 
+
+ggplot(data = df1, aes(x = displ, y = hwy, label = trans)) +
+  geom_point(aes(shape = class),position = "jitter")  + 
+  scale_shape_manual(values = 1:7)
+
+ggplot(data = cars, aes(speed, dist)) + 
+  geom_point(aes(size = 2.0,alpha = 0.4), show.legend = FALSE) +
+  labs(title = "Relationship between Speed and Braking", 
+       ylab = "Stopping distance (ft)",
+       xlab = "Speed (mph)")
+
+```
+
+Histogram
+
+```{r}
+heights = read.csv("../data/heights.csv", header= TRUE, stringsAsFactors = TRUE)
+
+ggplot(data = heights) + 
+  geom_histogram(aes(x = earn/1000, y = ..density.., fill = sex),  
+                 binwidth = 10, color = "white", boundary = 0) 
+
+ggplot(data = heights) + 
+  geom_histogram(aes(x = earn/1000, y = ..density.., fill = sex),  
+                 binwidth = 10, color = "white", boundary = 0, position = "dodge") +
+  scale_fill_discrete(name = "Gender", labels = c("Female", "Male"))
+
+ggplot(data = heights) + 
+  geom_density(aes(x= earn/1000, fill = sex), alpha = 0.2)
+
+```
+CDF
+
+```{r}
+
+heights %>%
+  filter(sex == "female") %>%
+  sample_n(20) %>%
+  ggplot(aes(x = earn/1000)) + 
+  stat_ecdf()
+
+heights %>%
+  ggplot(aes(x = earn/1000, col = sex)) +
+  stat_ecdf()
+
+
+```
+normal dist
+
+```{r}
+
+ggplot(data = data.frame(x = seq(-5, 5)), aes(x)) +
+stat_function(fun = dnorm, n = 101, args = list(mean = 0, sd = 1)) +
+labs(x = "", y = "", title = "A standard normal distribution")
+
+heights_f = heights %>% filter(sex == "female")
+
+heights_f %>%
+  ggplot(aes(height)) + 
+  geom_density(fill = "lightblue", alpha = 0.5) +
+  stat_function(fun = dnorm, args = list(mean(heights_f$height), sd(heights_f$height)))
+
+
+```
+line graphs
+
+```{r}
+
+
+UN_data = read_excel("../data/UNESCAP_population_2010_2015.xlsx", sheet = 3)
+head(UN_data)
+
+pop1 = UN_data %>% gather(Y2010:Y2015, key = years, value = population) %>%
+  mutate(years = as.integer(str_sub(years, 2, 5))) %>%
+  filter(e_fname %in% c("Singapore", "Malaysia", "Cambodia",
+  "Thailand", "Viet Nam", "Lao PDR",
+  "Brunei Darussalam"))
+
+ggplot(data = pop1, aes(years, population)) +
+  geom_line(aes(color = e_fname))
+
+end_pts = pop1 %>% filter(years == 2015) %>%
+  mutate(fname = recode(e_fname, "Brunei Darussalam" = "Brunei"))
+
+ggplot(data = pop1, aes(years, population, group = e_fname)) + 
+  geom_line() +
+  geom_point(data = end_pts, aes(years)) + 
+  geom_text(data = end_pts, aes(label = fname), hjust = "left", nudge_x = 0.1) +
+  geom_vline(xintercept = 2011, linetype = "dashed") +
+  geom_hline(yintercept = 1000, linetype = "dashed") +
+  geom_abline(slope = 1)
+
+```
+reconstruction of graph
+
+```{r}
+library(dslabs)
+library(ggthemes)
+
+df = murders
+head(df)
+
+df %>% distinct(state)
+df %>% count(state)
+
+r = df %>% summarize(rate = sum(total)/ (sum(population) / 1e6)) %>%
+  pull(rate)
+
+df %>% ggplot(aes(x = population/1e6, y = total)) +
+  geom_point(aes(color = region), size = 3,  show.legend = FALSE) +
+  geom_text(aes(label = abb), nudge_x = 0.07) +
+  scale_x_log10() + 
+  scale_y_log10() +
+  labs(title = "US Gun Murders in 2010",
+    x = "Population in millions (log scale)",
+    y = "Total number of murders (log scale)") +
+  geom_abline(slope = 1, intercept = log10(r), lty = 2, color = "darkgrey") + 
+  theme_economist()
+  
+    
+
+```
+
+
+
+bar charts
+
+```{r}
+
+budget_cat = c("Manpower", "Asset", "Other") # create data frame
+amount = c(519.4, 38.0, 141.4)
+op_budget = data.frame(budget_cat, amount)
+barplot(op_budget$amount, border = NA, names.arg = op_budget$budget_cat)
+
+ggplot(data = op_budget, aes(budget_cat, amount)) +
+  geom_col()
+
+op_budget %>% mutate(budget_cat = reorder(budget_cat, -amount)) %>%
+  ggplot(aes(budget_cat, amount)) + 
+  geom_col()
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+
+imda_data = readRDS("../data/imda.rds")
+str(imda_data)
+
+young_adults = imda_data %>% filter(age == "20-29", year == 2015) %>%
+  mutate(pct = as.numeric(ever_used),
+         media_activity = reorder(media_activity, pct))
+
+ggplot(data = young_adults) +
+  geom_col(aes(media_activity, pct, fill = media_activity)) + 
+  coord_flip()
+
+
+tv = imda_data %>%
+  filter(media_activity %in% c("Watch MediaCorp TV",
+                               "Watch StarHub TV", "Watch Singtel TV")) %>%
+  mutate(pct = as.numeric(ever_used),
+         age = reorder(as.factor(age), as.numeric(substr(age, 1, 2))))
+
+
+p1 = ggplot(tv, aes(x = year, y = pct)) +
+  geom_col(aes(fill = media_activity),
+           position = "dodge") +
+  facet_wrap(~ age) +
+  labs(title = "Percentage of Young Adults ...",
+       x = "Activity", y = "Percentage", fill = "Activity") +
+  theme(legend.position = "bottom")
+
+
+```
+
+
+
+
+
+smoothed line & loess
+
+```{r}
+
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(position = "jitter") +
+  geom_smooth(method = "lm", formula = y ~ poly(x, 5)) +
+  labs(x = "Engine Displacement (l)", y = "Highway Miles per Gallon")
+
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point(position = "jitter") +
+  geom_smooth(method = "loess", span = 0.2) +
+  labs(x = "Engine Displacement (l)", y = "Highway Miles per Gallon")
+
+
+```
+
+loess by group
+
+
+```{r}
+
+ggplot(mpg, aes(x = displ, y = hwy, col = drv)) +
+  geom_point(position = "jitter") +
+  geom_smooth(aes(linetype = drv),
+              method = "loess", show.legend = FALSE) +
+  labs(x = "Engine Displacement (l)", y = "Highway Miles per Gallon") +
+  scale_color_discrete(name = "Drive type",
+  labels = c("Four-wheel", "Front-wheel", "Rear-wheel")) +
+  theme(legend.position = "top")
+```
+
+rug plot
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point(position = "jitter") +
+  geom_rug(position = "jitter") +
+  labs(x = "Engine Displacement (l)", y = "Highway Miles per Gallon")
+
+
+```
+
+boxplot
+
+```{r}
+
+df = mpg %>% mutate(class = reorder(class, hwy, FUN = median))
+
+ggplot(df, aes(x = class, y = hwy)) +
+  geom_boxplot(outlier.color = "red",  outlier.shape = 1) +
+  labs(x = "Class of Car", y = "Highway Fuel Efficiency")
+
+
+
+
+```
+
+
+remove outliers
+
+```{r}
+heights2 = heights %>%
+  group_by(sex) %>%
+  mutate(max_earn = quantile(earn, 0.75) + 1.5 * IQR(earn),
+  min_earn = quantile(earn, 0.25) - 1.5 * IQR(earn)) %>%
+  filter(earn <= max_earn & earn >= min_earn) %>% ungroup()
+
+ggplot(data = heights2) +
+geom_boxplot(aes(x = earn, y = sex))
+
+
+```
+
+2D Histograms
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_bin2d(binwidth = c(0.5, 5)) +
+  scale_fill_gradient(name = "Count", low = "white", high = "red") +
+  labs(title = "2D Bins",
+       x = "Engine Displacement (l)", y = "Highway Miles per Gallon")
+
+
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_hex(binwidth = c(0.5, 5)) +
+  scale_fill_gradient(name = "Count", low = "white", high = "red") +
+  labs(title = "Hexagonal Bins",
+       x = "Engine Displacement (l)", y = "Highway Miles per Gallon")
+
+
+```
+
+
+```{r}
+library(ggrepel)
+data(gapminder)
+
+summary(gapminder)
+
+gapminder %>% filter(!is.na(gdp)) %>%
+  group_by(year) %>%
+  count()
+
+df = gapminder %>% filter(year == 2011) %>%
+  mutate(gdpc = gdp / population) %>%
+  filter(!is.na(gdpc))
+  
+
+ggplot(data = df, aes(gdpc, life_expectancy)) + 
+  geom_point(aes(color = continent, size = population)) + 
+  scale_x_log10() +
+  geom_text_repel(aes(label = country), show.legend = FALSE, size = 2) +
+  guides(size = "none")
+
+```
+
+
+Top streaming services in the US: There are only a few data points on the graph. We
+can manually create the data frame.
+
+```{r}
+services = c("Netflix", "PrimeVideo", "hulu", 
+             "Disney", "AppleTV", "peacock", "HBO", "Paramount", "others")
+level =  c("Netflix", "PrimeVideo", "hulu", 
+             "Disney", "AppleTV", "peacock", "HBO", "Paramount", "others")
+
+streaming = tibble::tribble(
+  ~service, ~`2020`, ~`2021`,
+  "Netflix", 29, 20,
+  "Prime", 21, 16,
+  "Hulu", 16, 13,
+  "Disney", 12, 11,
+  "Apple", 4, 5,
+  "Peacock", 0, 5,
+  "HBO", 3, 12,
+  "Paramount", 2, 3,
+  "Others", 13, 15
+)
+
+
+y_2020 = c(29,21,16,12,4,0,3,2,13)
+y_2021 = c(20,16,13,11,5,5,12,3,15)
+
+df = data.frame(services, y_2020, y_2021)
+
+df = df %>% gather(`y_2020`:`y_2021`, key = "year", value = "pct") %>%
+  mutate(year = (str_sub(year, 3, 7))) %>%
+  mutate(services = factor(services, ordered = TRUE,
+                           levels = level))
+
+ggplot(data = df, aes(services, pct, label = paste0(pct, "%"), fill = year)) +
+  geom_col(position = "dodge") + 
+  geom_text(aes(services, pct + 1, group = year), position = position_dodge(width = 1)) + 
+  scale_fill_manual(values = c("2020" = "red3", "2021" = "black")) + 
+  scale_y_continuous(labels = scales::label_number(suffix = "%")) + 
+  labs(x = "", y= "", title = "US Streaming Market Share") +
+  theme_minimal() + 
+  theme(plot.title = element_text(hjust = 0.5),
+        legend.position = "top")
+
+```
+improvement
+
+```{r}
+growth = df %>%
+  group_by(services) %>%
+  mutate(pct_change = pct - lag(pct)) %>%
+  na.omit() 
+
+
+ggplot(data= growth) + 
+  geom_col(aes(services, pct_change, fill = pct_change > 0)) + 
+  coord_flip() + 
+  scale_fill_manual(values = c(`TRUE` = "darkcyan", `FALSE` = "red3"))
+
+```
+
+
+
+How Chinese New Year compares with Thanksgiving: cny_thanksgiving.xls
+
+```{r}
+
+
+cny = read_excel("../data/cny_thanksgiving.xlsx") %>%
+  mutate(Population = case_when(Country == "China" ~ 1339724852,
+                                Country == "USA" ~ 307745538),
+         Per_capita = Amount/Population,
+         Amount = Amount / 1e9) %>%
+  filter(Category != "Population Census 2010") %>%
+  rename(total = Amount) %>%
+  gather(total, Per_capita, key = "mertics", value = "amount")
+
+ggplot(data = cny %>% filter(mertics == "Per_capita"), aes(Country, amount, fill = Country)) + 
+  geom_col(show.legend = FALSE)+ 
+  facet_wrap(~ Category, scales = "free_y", labeller = label_wrap_gen()) + 
+  scale_fill_manual(values = c("China" = "red3", "USA" = "blue")) + 
+  labs(x = "" , y = "", fill = "",
+       title = "How does Chinese New Year compare to Thanksgiving?") + 
+  theme_minimal()
+
+
+```
+
+
+
+
+
+
+
+Monthly cereal consumption: personal_consumption_expenditures.xlsx.
+
+```{r}
+cereal = read_excel("../data/personal_consumption_expenditures.xlsx") %>%
+  filter(`Sub-Category` == "Cereals") %>%
+  rename(subcat = `Sub-Category`,
+         amount = `Millions of Dollars`) %>%
+  mutate(amount = amount /1000)
+
+ggplot(data = cereal, aes(x = Month, y = amount)) +
+  geom_line(linewidth = 2) + 
+  geom_area(fill = "cornflowerblue", alpha = 0.2) + 
+  labs(x= "", y = "", title = "Well that sure was unusual",
+       subtitle = "Monthly US personal consumption expenditures on cereals",
+       caption = "Source: US Burea") + 
+  theme_minimal()
+
+
+
+```
+graph 2
+```{r}
+covid = cereal %>% mutate(year = year(Month),
+                          month = month(Month, label = TRUE, abbr = TRUE)) %>%
+  filter(year == 2020 | year == 2019) %>%
+  select(amount:month) %>%
+  spread(key = year, value = amount)
+
+
+ggplot(data = covid, aes(month, amount)) +
+    geom_segment(aes(x = month, y = `2020`, xend = month, yend = `2019`), color = "grey") + 
+  geom_point(data = covid, aes(x = month, y = `2019`), color = "grey", alpha = 0.5, size = 5) + 
+  geom_point(data = covid, aes(x = month, y =`2020`), color = "indianred4", size = 5) + 
+  labs(x = "", y= "Expenditure in billions of dollars",
+       title = "Consumption of Cereals during the pandemic, 2020 (red) 2019 (grey)", 
+       caption = "Source: US Burea of Economic Analysis")
+
+
+```
+
+
+
+Who do we spend time with in our life: time-spent-with-relationships-by-age-us.csv.
+
+
+```{r}
+time = read.csv("../data/time-spent-with-relationships-by-age-us.csv")
+time = time %>% rename(alone = 4,
+                friends = 5,
+                children = 6,
+                family = `Time.spent.with.with.parents..siblings.and.other.family..by.age.of.respondent..United.States.`, 
+                partner = `Time.spent.with.partner..by.age.of.respondent..United.States.`,
+                coworkers = `Time.spent.with.coworkers..by.age.of.respondent..United.States.`,)
+
+time = time %>% gather(`alone`:`coworkers`, key = "type", value = "minutes") %>%
+  filter(Year <= 80)
+
+labels = time %>% filter(Year == 80 )
+
+ggplot(data = time, aes(Year, minutes, color = type), show.legend = FALSE) +
+  geom_point(show.legend = FALSE) + 
+  geom_line(show.legend = FALSE) + 
+  geom_text_repel(data = labels, aes(label = type), show.legend = FALSE, nudge_x = 3.5) + 
+  scale_y_continuous(labels = scales::label_number(suffix = " mins"),
+                     breaks = seq(0,400,100)) + 
+  scale_x_continuous(breaks = c(15,20,30,40,50,60,70,80), limits = c(15,90)) + 
+  labs(x = "Age", y = "", 
+       title = "Who Americans spend their time with, by age") + 
+  scale_x_continuous(guide = "none") + # this removes the legend 
+  theme_minimal() + 
+  labs(x = "", y= "lorem ipsum",
+       title = "lorem ipsum", 
+       caption = "Source: US Burea of Economic Analysis")
+  
+  
+
+
+```
+
+
+NBA plots
+
+```{r}
+
+library(ggrepel)
+nba = read.csv("../data/NBA_Team_stats.csv") %>%
+  separate(Year, into = c("start_year", "end_year"), convert = TRUE) %>%
+  filter(start_year >= 2010) %>%
+  select(`No`:`Pf`, start_year) %>%
+  gather(`Pts`:`Pf`, key = "type", value = "values")
+
+pts = nba %>% filter(type == "Pts") 
+end_labels = pts %>% filter(start_year == 2021) %>%
+  top_n(10, values)
+
+top_10 = end_labels %>% pull(Team)
+
+pts = pts %>% filter(Team %in% top_10)
+
+ggplot(data = pts, aes(start_year, values, color = Team, show.legend = FALSE)) +
+  geom_line(aes(groups = Team), show.legend = FALSE) +
+  geom_text_repel(data = end_labels, aes(start_year, values, label = Team), show.legend = FALSE, 
+                  nudge_x = 2) +
+  scale_x_continuous(labels = scales::label_number(suffix = " season")) + 
+  scale_y_continuous(breaks = seq(100,130,5)) +
+  labs(x = "Points", y = "Seasons", title = "NBA Average points for each team (2010-2021)" ) + 
+  theme_minimal()
+
+```
+nba players
+
+```{r}
+
+players = read.csv("../data/NBA_Player_Stats.csv") %>%
+  separate(Year, into = c("start", "end")) %>%
+  mutate(start = as.numeric(start), 
+         end = as.numeric(end)) %>%
+  filter(start >= 2010)
+
+players %>% distinct(Player)
+
+allstars_2023 = c("Giannis Antetokounmpo", "Lauri Markkanen", "Donovan Mitchell", "Ja Morant",
+                  "Jayson Tatum", "LeBron James", "Luka Dončić", "Joel Embiid", "Kyrie Irving",
+                  "Nikola Jokić")
+
+global_type = "AST"
+allstars = players %>% filter(Player %in% allstars_2023) %>%
+  gather(`G`:`PTS`, key = "type", value = "values")
+
+end_labelss = allstars %>% filter(end == 2022, type == global_type) %>% arrange(desc(values))
+
+allstars_df = allstars %>% mutate(Player = factor(Player, levels = end_labelss %>% pull(Player)))
+
+ggplot(data = allstars_df %>% filter(type == global_type), aes(start, values, color = Player)) +
+  geom_point() + 
+  geom_line() +
+  scale_x_continuous(labels = scales::label_number(suffix = "season")) +
+  labs(x = "Points", y = "Seasons",
+       title = "Average AST per season for the 2023 All-Star teams from 2010 season onwards") +
+  theme_minimal()
+```
+
+jimmmy butler
+
+```{r}
+
+butler = tibble::tribble(
+  ~season, ~`reg`, ~`playoffs`,
+  "2022-2023", 23.0, 36.5,
+  "2021-2022", 21.4, 27.4,
+  "2020-2021", 21.5, 14.5,
+  "2019-2020", 33.8, 38.4,
+  "2018-2019", 33.2, 35.1,
+  "2017-2018", 22.2, 15.8,
+  "2016-2017", 37.0, 39.8,
+  "2014-2015", 38.7, 42.2,
+  "2013-2014", 38.7, 43.5,
+  "2012-2013", 26.0, 40.8,
+)
+
+
+colors = c("reg" = "grey", "playoffs" = "indianred4")
+
+ggplot(data = butler, aes(season, points)) + 
+  geom_segment(aes(x = season, y = `reg`, xend = season, yend = `playoffs`), color = "grey")+
+  geom_point(data = butler, aes(x = season, y = `reg`, color = "reg"), size = 5) +
+  geom_point(data = butler, aes(x = season, y = `playoffs`, color = "playoffs"), size = 5) + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  labs(x = "Seasons", y= "Average points",
+       title = "Scoring Performance of Jimmy Butler",
+       caption = "Source: hoopsstats.com",
+       color = "Legend") +
+  scale_color_manual(values = colors,  labels = c("Playoffs", "Regular Season")) + 
+  theme_clean() +
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5, size = 9, face = "italic"),
+        plot.caption = element_text(face = "italic"),
+        legend.position = "top",
+        legend.title = element_text(size = 9),
+        legend.text = element_text(size = 9))
+butler = butler %>% gather(`reg`:`playoffs`, key = "period", value = "points")
+
+```
+
+BASE R
+
+```{r}
+
+a1 = seq(13, 21)
+a1
+
+a2 = seq(13,21, by = 2)
+a2
+
+a1 + a2
+
+sum(1:100) == 100* (100+1)/2
+
+data(airquality)
+summary(airquality)
+class(airquality)
+str(airquality)
+
+sum(is.na(airquality ))
+
+which(is.na(airquality))
+
+df = na.omit(airquality)
+
+df_summer = df[df$Month %in% c(5,6),]
+df_fall = df[df$Month %in% c(7, 8, 9),]
+
+df$Season = ifelse(df$Month %in% c(5,6), "Summer", "Fall")
+df$Season = factor(df$Season)
+
+summary(df$Temp)
+
+str(df)
+
+tapply(df$Temp, df$Season, summary)
+
+df$Month[df$Month == 5] = "May"
+df$Month[df$Month == 6] = "June"
+df$Month[df$Month == 7] = "July"
+df$Month[df$Month == 8] = "August"
+df$Month[df$Month == 9] = "September"
+df$Month = factor(df$Month, levels = c("May", "June", "July", "August","September"))
+
+
+boxplot(df$Temp ~ df$Month, xlab = "Month", ylab = "Temperature",
+          main = "Monthly temperature in New York")
+
+ggplot(data = df, aes(Month, Temp)) + 
+  geom_boxplot() +
+  labs(x = "Month", y = "Temperature", title = "Monthly temperature in New York")
+
+```
+LUBRIDATE
+
+```{r}
+
+shanghai = read.csv("../data/Shanghai.csv")
+
+head(shanghai, 3)
+
+
+shanghai$Date = paste0(shanghai$Year, "-", shanghai$Month)
+
+shanghai$Date = ym(shanghai$Date)
+shanghai
+
+shanghai_2012 = shanghai[shanghai$Year == 2012,]
+
+plot(shanghai_2012$Month, shanghai_2012$Temp, xlab = "Month", 
+     ylab = "Temperature", type = "b", cex = 01, pch = 19,
+     main = "Monthly temperature in Shanghai 2012") 
+
+```
+FUNCTIONS
+
+
+```{r}
+# Q1.1 pass_check
+pass_check = function(grade) {
+  
+  # Check if the input is numeric
+  # If not, stop the current execution and print an error
+  if(!is.numeric(grade)) {
+    stop("The input is not numeric.")
+  } 
+  
+  if (grade >= 5){
+    print("pass")
+  } else {
+    print("fail")
+  }
+  
+}
+
+factor_convert = function(df) {
+  
+  for(i in 1:ncol(df)) {
+    
+    var = df[, i]
+    
+    if(is.character(var)) {
+      df[, i] = as.factor(var)
+    }
+  }
+  
+  return(df)
+  
+}
+
+select(df, where(is.factor)) 
+
+df[,sapply(df, is.factor)]
+
+
+```
+
+
+
+RDS
+
+
+```{r}
+
+hawk = readRDS("../data/hawker_ctr_raw.rds")
+hawk = hawk[[1]][-1]
+
+all_names = sapply(hawk, function(x) x$NAME)
+
+compute_dist = function(name1, name2) {
+  
+  id_1 = which(all_names == name1)
+  id_2 = which(all_names == name2)
+  
+  coord_1 = as.numeric(str_split(hawk[[id_1]]$XY, ",")[[1]])
+  coord_2 = as.numeric(str_split(hawk[[id_2]]$XY, ",")[[1]])
+  
+  dist = sqrt(sum((coord_1 - coord_2)^2))
+  dist
+}
+
+dist_example = compute_dist("Tanglin Halt Market", "Taman Jurong Market & Food Centre")
+
+hawk_combn = combn(all_names, 2)
+compute_dist_v = Vectorize(compute_dist)
+all_dist = compute_dist_v(hawk_combn[1, ], hawk_combn[2, ])
+dist_df = data.frame(hawker1 = hawk_combn[1, ],
+                     hawker2 = hawk_combn[2, ],
+                     dist = all_dist, stringsAsFactors = FALSE)
+
+dist_df
+
+
+```
+
+
+TIDY DATA
+```{r}
+
+unicef_hiv_tidy = read_excel("../data/unicef_hiv_data.xlsx", 
+                             range = "A1:O219", na = c("-", "<0.01")) %>%
+  filter(!(row_number() %in% c(1,2))) %>%
+  gather(`2021`:`2010`, key = "years", value = "values") %>%
+  mutate(values = as.numeric(values)) %>%
+  spread(key = indicator, value = values) %>%
+  rename(incidence = 4,
+         deaths = 5,
+         country = 1)
+
+
+
+global_evolution = unicef_hiv_tidy %>%
+  group_by(years) %>%
+  summarize(total = sum(incidence, na.rm = TRUE)) %>%
+  ungroup()
+
+ggplot(data = global_evolution, aes(years, total)) + 
+  geom_line(aes(group = 1))
+
+
+iso_unicef = read.csv("../data/iso_unicef_region.csv")
+
+overall = unicef_hiv_tidy %>% left_join(iso_unicef, by = c("country" = "Country.Region")) %>% 
+  filter(!(is.na(UNICEF.Region)))
+
+global_average = overall %>%
+  group_by(years) %>%
+  summarize(avg = mean(incidence, na.rm = TRUE)) %>%
+  ungroup()
+
+
+africa = overall %>% filter(UNICEF.Region == "Eastern and Southern Africa") %>%
+  group_by(years) %>%
+  summarize(avg = mean(incidence)) %>% 
+  ungroup()
+
+ggplot(data = africa) + 
+  geom_line(aes(years, avg, group = 1), color = "indianred4", linewidth = 1.5) + 
+  geom_line(data = global_average, aes(years, avg, group = 1), color = "grey", linewidth = 1.5) +
+  annotate(geom = "text", x = 10, y = 1.2, label = "Africa") +
+  annotate(geom = "text", x = 10, y = 0.63, label = "World") + 
+  labs(y = "Average incidence rate",
+  title = "HIV incidence rates in Eastern and Southern Africa to the global average")
+
+```
+
+
+
+JOINS
+
+```{r}
+
+themes = read.csv("../data/archive/themes.csv")
+sets = read.csv("../data/archive/sets.csv")
+inventory_sets = read.csv("../data/archive/inventory_sets.csv")
+colors = read.csv("../data/archive/colors.csv")
+inventories = read.csv("../data/archive/inventories.csv")
+inventory_parts = read.csv("../data/archive/inventory_parts.csv")
+parts = read.csv("../data/archive/parts.csv")
+part_categories = read.csv("../data/archive/part_categories.csv")
+
+part_cat = part_categories %>% 
+  filter(str_detect(name, "Bricks"))
+
+themes %>% anti_join(sets, by = c("id" = "theme_id")) %>% count()
+
+brick_parts = inventory_parts %>% 
+  left_join(colors, by = c("color_id" = "id")) %>%
+  left_join(parts, by = c("part_num" = "part_num")) %>%
+  left_join(part_cat, by = c("part_cat_id" = "id")) %>%
+  rename(part_name = 2,
+         part_cat_name = 3,
+         color_name = 4) %>%
+  na.omit()
+
+
+
+inv_parts_col = inventory_parts %>% left_join(colors, by = c("color_id" = "id"))
+parts_cat = parts %>% left_join(part_categories, by = c("part_cat_id" = "id"), 
+                                suffix = c("_parts", "_cats")) %>%
+  filter(str_detect(name_cats, "Bricks"))
+
+table = inv_parts_col %>% left_join(parts_cat, by = c("part_num" = "part_num")) %>%
+  filter(!(is.na(name_cats))) %>%
+  select(part_num, name_parts, name_cats, name, rgb)
+
+
+pop_themes = themes %>% 
+  left_join(sets, by = c("id" = "theme_id"), suffix = c("_themes", "_sets")) %>% 
+  filter(str_detect(name_themes, "Star Wars")) %>%
+  group_by(year) %>%
+  summarize(numSets = n_distinct(set_num),
+            avg = ceiling(mean(num_parts)))
+
+nrow(sets)
+nrow(inventories)
+
+sets %>% left_join(inventories) %>%
+  group_by(set_num) %>%
+  count() %>%
+  filter(n > 1)
+```
+
+
+
+MIDTERMS
+
+```{r}
+
+tset = tibble::tribble(
+  ~abb, ~full, ~number, 
+  "Jan", "January", 1,
+  "Feb", "February", 2,
+  "Mar", "March", 3,
+  "Apr", "April", 4,
+  "May", "May", 5
+)
+
+tset %>% mutate(a = match(abb, month.abb))
+tset %>% mutate(a = match(full, month.name))
+
+
+```
+
+
+
+

@@ -1,0 +1,174 @@
+rank,major,major_category,major_stem,total,sharewomen,unemployment_rate,median
+1,Petroleum Engineering,Engineering,STEM,2339,0.120564344,0.018380527,110000
+2,Mining And Mineral Engineering,Engineering,STEM,756,0.101851852,0.117241379,75000
+3,Metallurgical Engineering,Engineering,STEM,856,0.153037383,0.024096386,73000
+4,Naval Architecture And Marine Engineering,Engineering,STEM,1258,0.107313196,0.050125313,70000
+5,Chemical Engineering,Engineering,STEM,32260,0.341630502,0.061097712,65000
+6,Nuclear Engineering,Engineering,STEM,2573,0.144966965,0.177226407,65000
+7,Actuarial Science,Business,non-STEM,3777,0.441355573,0.095652174,62000
+8,Astronomy And Astrophysics,Physical Sciences,STEM,1792,0.535714286,0.021167415,62000
+9,Mechanical Engineering,Engineering,STEM,91227,0.119558903,0.057342278,60000
+10,Electrical Engineering,Engineering,STEM,81527,0.196450256,0.059173845,60000
+11,Computer Engineering,Engineering,STEM,41542,0.199412643,0.065409275,60000
+12,Aerospace Engineering,Engineering,STEM,15058,0.139792801,0.065162085,60000
+13,Biomedical Engineering,Engineering,STEM,14955,0.437846874,0.09208386,60000
+14,Materials Science,Engineering,STEM,4279,0.310820285,0.023042836,60000
+15,Engineering Mechanics Physics And Science,Engineering,STEM,4321,0.183985189,0.006334343,58000
+16,Biological Engineering,Engineering,STEM,8925,0.320784314,0.087143069,57100
+17,Industrial And Manufacturing Engineering,Engineering,STEM,18968,0.343473218,0.042875544,57000
+18,General Engineering,Engineering,STEM,61152,0.252959838,0.059824231,56000
+19,Architectural Engineering,Engineering,STEM,2825,0.350442478,0.061930783,54000
+20,Court Reporting,Law & Public Policy,non-STEM,1148,0.236062718,0.011689692,54000
+21,Computer Science,Computers & Mathematics,STEM,128319,0.222695002,0.063172771,53000
+22,Food Science,Agriculture & Natural Resources,non-STEM,NA,NA,0.09693146,53000
+23,Electrical Engineering Technology,Engineering,STEM,11565,0.292607004,0.087557114,52000
+24,Materials Engineering And Materials Science,Engineering,STEM,2993,0.325091881,0.027788805,52000
+25,Management Information Systems And Statistics,Business,non-STEM,18713,0.278790146,0.058239614,51000
+26,Civil Engineering,Engineering,STEM,53153,0.227117943,0.070609574,50000
+27,Construction Services,Industrial Arts & Consumer Services,non-STEM,18498,0.090712509,0.060023041,50000
+28,Operations Logistics And e-Commerce,Business,non-STEM,11732,0.32483805,0.047858703,50000
+29,Miscellaneous Engineering,Engineering,STEM,9133,0.189970437,0.074392523,50000
+30,Public Policy,Law & Public Policy,non-STEM,5978,0.558548009,0.128426299,50000
+31,Environmental Engineering,Engineering,STEM,4047,0.342228811,0.093588575,50000
+32,Engineering Technologies,Engineering,STEM,3600,0.251388889,0.055030385,50000
+33,Miscellaneous Fine Arts,Arts,non-STEM,3340,0.410179641,0.089375,50000
+34,Geological And Geophysical Engineering,Engineering,STEM,720,0.322222222,0.075038285,50000
+35,Nursing,Health,non-STEM,209394,0.896018988,0.044862724,48000
+36,Finance,Business,non-STEM,174506,0.340824957,0.060686356,47000
+37,Economics,Social Science,non-STEM,139247,0.355469059,0.099092317,47000
+38,Business Economics,Business,non-STEM,13302,0.430536761,0.096448381,46000
+39,Industrial Production Technologies,Engineering,STEM,4631,0.24919024,0.028308097,46000
+40,"Nuclear, Industrial Radiology, And Biological Technologies",Physical Sciences,STEM,2116,0.75047259,0.07154047,46000
+41,Accounting,Business,non-STEM,198633,0.524152583,0.069749014,45000
+42,Mathematics,Computers & Mathematics,STEM,72397,0.448098678,0.047277138,45000
+43,Computer And Information Systems,Computers & Mathematics,STEM,36698,0.253583302,0.093460326,45000
+44,Physics,Physical Sciences,STEM,32142,0.281936407,0.048224496,45000
+45,Medical Technologies Technicians,Health,non-STEM,15914,0.75392736,0.03698279,45000
+46,Information Sciences,Computers & Mathematics,STEM,11913,0.244103081,0.060741445,45000
+47,Statistics And Decision Science,Computers & Mathematics,STEM,6251,0.526475764,0.086273666,45000
+48,Applied Mathematics,Computers & Mathematics,STEM,4939,0.434298441,0.090823307,45000
+49,Pharmacology,Biology & Life Science,STEM,1762,0.707718502,0.085531575,45000
+50,Oceanography,Physical Sciences,STEM,2418,0.688999173,0.056994819,44700
+51,Engineering And Industrial Management,Engineering,STEM,2906,0.174122505,0.03365166,44000
+52,Medical Assisting Services,Health,non-STEM,11123,0.927807246,0.042506527,42000
+53,Mathematics And Computer Science,Computers & Mathematics,STEM,609,0.178981938,0,42000
+54,Computer Programming And Data Processing,Computers & Mathematics,STEM,4168,0.269193858,0.11398259,41300
+55,Cognitive Science And Biopsychology,Biology & Life Science,STEM,3831,0.56486557,0.075236167,41000
+56,School Student Counseling,Education,non-STEM,818,0.854523227,0.107579462,41000
+57,International Relations,Social Science,non-STEM,28187,0.632986838,0.096798943,40100
+58,General Business,Business,non-STEM,234590,0.436301633,0.072861468,40000
+59,Architecture,Engineering,STEM,46420,0.451464886,0.113331949,40000
+60,International Business,Business,non-STEM,25894,0.589711902,0.096175064,40000
+61,Pharmacy Pharmaceutical Sciences And Administration,Health,non-STEM,23551,0.630716318,0.055520827,40000
+62,Molecular Biology,Biology & Life Science,STEM,18300,0.59420765,0.084361164,40000
+63,Miscellaneous Business & Medical Administration,Business,non-STEM,17947,0.42692372,0.071982974,40000
+64,Agriculture Production And Management,Agriculture & Natural Resources,non-STEM,14240,0.321769663,0.050030836,40000
+65,General Agriculture,Agriculture & Natural Resources,non-STEM,10399,0.4179248,0.019642463,40000
+66,Miscellaneous Engineering Technologies,Engineering,STEM,8804,0.200022717,0.05253852,40000
+67,Mechanical Engineering Related Technologies,Engineering,STEM,4790,0.077453027,0.056357078,40000
+68,Genetics,Biology & Life Science,STEM,3635,0.515543329,0.034117647,40000
+69,Miscellaneous Social Sciences,Social Science,non-STEM,3283,0.543405422,0.073079538,40000
+70,United States History,Humanities & Liberal Arts,non-STEM,3079,0.429684963,0.047179487,40000
+71,Industrial And Organizational Psychology,Psychology & Social Work,non-STEM,3014,0.643331121,0.108786611,40000
+72,Agricultural Economics,Agriculture & Natural Resources,non-STEM,2439,0.282902829,0.077249576,40000
+73,Physical Sciences,Physical Sciences,STEM,1436,0.377437326,0.035353535,40000
+74,Military Technologies,Industrial Arts & Consumer Services,non-STEM,124,0,0,40000
+75,Chemistry,Physical Sciences,STEM,66530,0.505140538,0.0539724,39000
+76,"Electrical, Mechanical, And Precision Technologies And Production",Industrial Arts & Consumer Services,non-STEM,2435,0.232443532,0.029479503,38400
+77,Business Management And Administration,Business,non-STEM,329927,0.473189524,0.072218341,38000
+78,Marketing And Marketing Research,Business,non-STEM,205211,0.615727227,0.061215064,38000
+79,Political Science And Government,Social Science,non-STEM,182621,0.485929877,0.101174601,38000
+80,Geography,Social Science,non-STEM,18480,0.382900433,0.113458628,38000
+81,Microbiology,Biology & Life Science,STEM,15232,0.580948004,0.066775872,38000
+82,Computer Administration Management And Security,Computers & Mathematics,STEM,8066,0.180882718,0.099723375,37500
+83,Biochemical Sciences,Biology & Life Science,STEM,39107,0.515406449,0.080531385,37400
+84,Botany,Biology & Life Science,STEM,1329,0.52896915,0,37000
+85,Computer Networking And Telecommunications,Computers & Mathematics,STEM,7613,0.305004597,0.151849807,36400
+86,Geology And Earth Science,Physical Sciences,STEM,10972,0.470196865,0.075448568,36200
+87,Human Resources And Personnel Management,Business,non-STEM,24497,0.747560926,0.059569649,36000
+88,Pre-Law And Legal Studies,Law & Public Policy,non-STEM,13528,0.672161443,0.071965016,36000
+89,Miscellaneous Health Medical Professions,Health,non-STEM,13386,0.881293889,0.08141125,36000
+90,Public Administration,Law & Public Policy,non-STEM,5629,0.476461183,0.1594906,36000
+91,Geosciences,Physical Sciences,STEM,1978,0.591001011,0.024373731,36000
+92,Social Psychology,Psychology & Social Work,non-STEM,1386,0.702020202,0.029649596,36000
+93,Environmental Science,Biology & Life Science,STEM,25965,0.584556133,0.078584681,35600
+94,Communications,Communications & Journalism,non-STEM,213996,0.669998505,0.075176976,35000
+95,Criminal Justice And Fire Protection,Law & Public Policy,non-STEM,152824,0.47501047,0.082452199,35000
+96,Commercial Art And Graphic Design,Arts,non-STEM,103480,0.690365288,0.096797577,35000
+97,Journalism,Communications & Journalism,non-STEM,72619,0.673143392,0.069176442,35000
+98,Multi-Disciplinary Or General Science,Physical Sciences,STEM,62052,0.564639335,0.055806815,35000
+99,Advertising And Public Relations,Communications & Journalism,non-STEM,53162,0.758060269,0.067960766,35000
+100,Area Ethnic And Civilization Studies,Humanities & Liberal Arts,non-STEM,31195,0.719858952,0.063429289,35000
+101,Special Needs Education,Education,non-STEM,28739,0.906677337,0.041507819,35000
+102,Physiology,Biology & Life Science,STEM,22060,0.618223028,0.0691628,35000
+103,Criminology,Social Science,non-STEM,19879,0.495397153,0.097243919,35000
+104,Nutrition Sciences,Health,non-STEM,18909,0.864456079,0.068700676,35000
+105,Health And Medical Administrative Services,Health,non-STEM,18109,0.764426528,0.089626262,35000
+106,Communication Technologies,Computers & Mathematics,STEM,18035,0.366176878,0.119511469,35000
+107,Transportation Sciences And Technologies,Industrial Arts & Consumer Services,non-STEM,15150,0.124950495,0.072724524,35000
+108,Natural Resources Management,Agriculture & Natural Resources,non-STEM,13773,0.374355623,0.066619195,35000
+109,Neuroscience,Biology & Life Science,STEM,13663,0.63814682,0.048481675,35000
+110,Multi/Interdisciplinary Studies,Interdisciplinary,non-STEM,12296,0.770901106,0.070860927,35000
+111,Atmospheric Sciences And Meteorology,Physical Sciences,STEM,4043,0.321296067,0.022228555,35000
+112,Forestry,Agriculture & Natural Resources,non-STEM,3607,0.125034655,0.096725743,35000
+113,Soil Science,Agriculture & Natural Resources,non-STEM,685,0.305109489,0,35000
+114,General Education,Education,non-STEM,143718,0.812876606,0.057359929,34000
+115,History,Humanities & Liberal Arts,non-STEM,141951,0.448732309,0.095666912,34000
+116,French German Latin And Other Common Foreign Language Studies,Humanities & Liberal Arts,non-STEM,48246,0.733967583,0.075566386,34000
+117,Intercultural And International Studies,Humanities & Liberal Arts,non-STEM,24650,0.652129817,0.083633531,34000
+118,Social Science Or History Teacher Education,Education,non-STEM,20198,0.507376968,0.054082941,34000
+119,Community And Public Health,Health,non-STEM,19735,0.792095262,0.112144387,34000
+120,Mathematics Teacher Education,Education,non-STEM,14237,0.728032591,0.016202835,34000
+121,Educational Administration And Supervision,Education,non-STEM,804,0.651741294,0,34000
+122,Health And Medical Preparatory Programs,Health,non-STEM,12740,0.566640502,0.069779712,33500
+123,Miscellaneous Biology,Biology & Life Science,STEM,10706,0.556603774,0.058545455,33500
+124,Biology,Biology & Life Science,STEM,280709,0.601858152,0.070724732,33400
+125,Sociology,Social Science,non-STEM,115433,0.718364766,0.084951001,33000
+126,Mass Media,Communications & Journalism,non-STEM,52824,0.532333788,0.089836827,33000
+127,Treatment Therapy Professions,Health,non-STEM,48491,0.721865913,0.059821207,33000
+128,Hospitality Management,Business,non-STEM,43647,0.651659908,0.061169193,33000
+129,Language And Drama Education,Education,non-STEM,30471,0.877227528,0.050306435,33000
+130,Linguistics And Comparative Language And Literature,Humanities & Liberal Arts,non-STEM,16601,0.733991928,0.10443571,33000
+131,Miscellaneous Education,Education,non-STEM,10150,0.64,0.059211951,33000
+132,Interdisciplinary Social Sciences,Social Science,non-STEM,9916,0.76432029,0.092305816,33000
+133,Ecology,Biology & Life Science,STEM,9154,0.576360061,0.054475193,33000
+134,Secondary Teacher Education,Education,non-STEM,17125,0.601751825,0.05222898,32500
+135,General Medical And Health Services,Health,non-STEM,33599,0.774576624,0.082101621,32400
+136,Philosophy And Religious Studies,Humanities & Liberal Arts,non-STEM,54814,0.416809574,0.096051684,32200
+137,Art And Music Education,Education,non-STEM,34181,0.6860244,0.038637747,32100
+138,English Language And Literature,Humanities & Liberal Arts,non-STEM,194673,0.70089843,0.08772359,32000
+139,Elementary Education,Education,non-STEM,170862,0.923745479,0.046585715,32000
+140,Physical Fitness Parks Recreation And Leisure,Industrial Arts & Consumer Services,non-STEM,125074,0.502846315,0.051467273,32000
+141,Liberal Arts,Humanities & Liberal Arts,non-STEM,71369,0.686992952,0.078267592,32000
+142,Film Video And Photographic Arts,Arts,non-STEM,38761,0.423208896,0.10577224,32000
+143,General Social Sciences,Social Science,non-STEM,12920,0.606888545,0.103454715,32000
+144,Plant Science And Agronomy,Agriculture & Natural Resources,non-STEM,7416,0.339670982,0.045454545,32000
+145,Science And Computer Teacher Education,Education,non-STEM,6483,0.683942619,0.047263682,32000
+146,Psychology,Psychology & Social Work,non-STEM,393735,0.779933204,0.083810867,31500
+147,Music,Arts,non-STEM,60633,0.506720763,0.075959674,31000
+148,Physical And Health Education Teaching,Education,non-STEM,28213,0.444582285,0.074667496,31000
+149,Art History And Criticism,Humanities & Liberal Arts,non-STEM,21030,0.845934379,0.060298284,31000
+150,Fine Arts,Arts,non-STEM,74440,0.667033853,0.084186296,30500
+151,Family And Consumer Sciences,Industrial Arts & Consumer Services,non-STEM,58001,0.91093257,0.067128194,30000
+152,Social Work,Psychology & Social Work,non-STEM,53552,0.904074544,0.06882792,30000
+153,Animal Sciences,Agriculture & Natural Resources,non-STEM,21573,0.752143884,0.050862499,30000
+154,Visual And Performing Arts,Arts,non-STEM,16250,0.745661538,0.102197419,30000
+155,Teacher Education: Multiple Levels,Education,non-STEM,14443,0.810704147,0.03654583,30000
+156,Miscellaneous Psychology,Psychology & Social Work,non-STEM,9628,0.798919817,0.05190783,30000
+157,Human Services And Community Organization,Psychology & Social Work,non-STEM,9374,0.90558993,0.037819026,30000
+158,Humanities,Humanities & Liberal Arts,non-STEM,6652,0.697384245,0.068584071,30000
+159,Theology And Religious Vocations,Humanities & Liberal Arts,non-STEM,30207,0.383719006,0.062628297,29000
+160,Studio Arts,Arts,non-STEM,16977,0.719974083,0.089552239,29000
+161,Cosmetology Services And Culinary Arts,Industrial Arts & Consumer Services,non-STEM,10510,0.584776403,0.055676856,29000
+162,Miscellaneous Agriculture,Agriculture & Natural Resources,non-STEM,1488,0.728494624,0.059766764,29000
+163,Anthropology And Archeology,Humanities & Liberal Arts,non-STEM,38844,0.707136237,0.102791571,28000
+164,Communication Disorders Sciences And Services,Health,non-STEM,38279,0.967998119,0.047584,28000
+165,Early Childhood Education,Education,non-STEM,37589,0.968953683,0.040104981,28000
+166,Other Foreign Languages,Humanities & Liberal Arts,non-STEM,11204,0.690110675,0.107115726,27500
+167,Drama And Theater Arts,Arts,non-STEM,43249,0.666119448,0.07754113,27000
+168,Composition And Rhetoric,Humanities & Liberal Arts,non-STEM,18953,0.629504564,0.081742207,27000
+169,Zoology,Biology & Life Science,STEM,8409,0.637293376,0.04632028,26000
+170,Educational Psychology,Psychology & Social Work,non-STEM,2854,0.817098809,0.065112187,25000
+171,Clinical Psychology,Psychology & Social Work,non-STEM,2838,0.799859056,0.149048198,25000
+172,Counseling Psychology,Psychology & Social Work,non-STEM,4626,0.798746217,0.053620646,23400
+173,Library Science,Education,non-STEM,1098,0.877959927,0.104945718,22000

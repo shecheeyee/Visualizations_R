@@ -1,0 +1,3 @@
+{"fruit": "Apple", "price": 2.03, "shelf": ["lower", "middle"]}
+{"fruit": "Orange", "price": 1.03, "shelf": ["middle", "upper"]}
+{"fruit": "Watermelon", "price": 0.99, "shelf": ["lower"]}
